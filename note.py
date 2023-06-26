@@ -3,16 +3,16 @@
 import sqlite3
 
 
-# note = ""
+note = ""
 
-# def init(new_note: str):
-#     global note
-#     note =  new_note
+def init(new_note: str):
+    global note
+    note =  new_note
 
 
 def add_new_note():
     database = input("В какую базу данных вы хотите создать заметку?: ") 
-    new_note = input("Введите заметку: ")
+    new_note = init(input("Введите заметку: "))
     try:
         sqlite_connection = sqlite3.connect(f'{database}.db')
         cursor = sqlite_connection.cursor()
@@ -43,8 +43,8 @@ def update_note():
                         if not num_old_note:
                             break
                         elif num_old_note.isdigit() and int(num_old_note) in available_notes:
-                            old_note = results[int(num_old_note)][0]
-                            upd_note = input("На какую заметку хотите поменять?: ")
+                            old_note = init(results[int(num_old_note)][0])
+                            upd_note = init(input("На какую заметку хотите поменять?: "))
                             cursor.execute(f"UPDATE notes SET note = '{upd_note}' WHERE note == '{old_note}'")
                             print("Запись успешно обновлена")
                             sqlite_connection.commit()
@@ -85,7 +85,7 @@ def delete_note():
                         if not num_del_note:
                             break
                         elif num_del_note.isdigit() and int(num_del_note) in available_notes:
-                            del_note = results[int(num_del_note)][0]
+                            del_note = init(results[int(num_del_note)][0])
                             print(del_note)
                             cursor.execute(f"DELETE FROM notes WHERE note = '{del_note}'")
                             print("Запись успешно удалена")
